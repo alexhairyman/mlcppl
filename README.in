@@ -1,0 +1,4 @@
+### This page has some dynamically set cmake variables on it!
+# @I_PROJ@
+## @I_VER@
+### @I_AUTH@

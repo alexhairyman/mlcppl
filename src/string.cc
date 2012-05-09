@@ -1,7 +1,7 @@
 /*
- * Author: @M_AUTHOR@
- * Version: @M_VERSION@
- * README: @M_README
+ * Author: @I_AUTH@
+ * Version: @I_VER@
+ * README: @I_READ@
  * Build Tool: CMAKE
- * File: output.hh
+ * File: string.cc
  */
