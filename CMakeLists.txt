@@ -8,6 +8,9 @@ add_custom_target(clean_cache
 
 set(EXECUTABLE_OUTPUT_PATH "${CMAKE_CURRENT_BINARY_DIR}/bin")
 set(LIBRARY_OUTPUT_PATH "${CMAKE_CURRENT_BINARY_DIR}/lib")
+set(M_TEST OFF
+	CACHE BOOL "build available modules with a small test buil in to each"
+)
 
 include(CheckCXXCompilerFlag)
 CHECK_CXX_COMPILER_FLAG("-std=c++0x" CXX11)
