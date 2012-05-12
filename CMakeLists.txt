@@ -56,7 +56,6 @@ list(APPEND
   )
   
 
-
 #info variables
 set(I_PROJ "${PROJECT_NAME}")
 set(I_AUTH "Alex Herrmann")
@@ -96,16 +95,46 @@ foreach(_C_FILE IN LISTS M_AVAIL)
 	  add_executable("${_C_FILE}" "${_C_FILE}.cc")
 	endif()
   endif()
-  
 endforeach(_C_FILE)
 
+message("Compile static ulib library")
 add_library("ulib" STATIC ${M_COMP})
+message("Compiling shared library")
+add_library("ulib_so" SHARED ${M_COMP})
+
+set_target_properties(ulib_so ulib
+  PROPERTIES VERSION "0.0.3a"
+  )
+
 
 if(_TEST_)
   foreach(_T_FILE IN LISTS T_AVAIL)
+    message("compiling static test ${_T_FILE}")
+    message("compiling shared test ${_T_FILE}-so")
     add_executable(${_T_FILE} test/${_T_FILE}.cc)
+    add_executable(${_T_FILE}-so test/${_T_FILE}.cc)
     add_dependencies(${_T_FILE} ulib)
+    add_dependencies(${_T_FILE}-so ulib_so)
     target_link_libraries(${_T_FILE} ulib)
+    target_link_libraries(${_T_FILE}-so ulib_so)
     include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
   endforeach()
 endif()
+
+set(CPACK_SOURCE_IGNORE_FILES "build/*")
+
+if(NOT _sgit)
+  set(CPACK_SOURCE_IGNORE_FILES "build/*;.git/*")
+endif()
+
+set(CMAKE_INSTALL_PREFIX "/usr/local")
+set(CPACK_DEBIAN_PACKAGE_MAINTAINER "alxehairyman@gmail.com")
+
+set(CPACK_GENERATOR "DEB;RPM;TGZ;TBZ2;STGZ;ZIP")
+set(CPACK_SOURCE_GENERATOR "ZIP;TBZ2;TGZ")
+
+install(TARGETS ulib
+  DESTINATION lib
+  )
+
+include(CPack)
