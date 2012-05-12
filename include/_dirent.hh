@@ -8,13 +8,7 @@
  * This is a file I wrote to simply help myself, but go ahead and use it
  */
 
-#include "../conf.hh"
-#include <dirent.h>
-#include <vector>
-#include <string>
-#include <unistd.h>
-#include <exception>
-#include <stdio.h>
+#include "conf.hh"
 
 using namespace std;
 

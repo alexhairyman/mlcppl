@@ -6,8 +6,7 @@
  * File: util.hh
  */
 
-#include <string>
-#include <initializer_list>
+#include "conf.hh"
 
 using namespace std;
 

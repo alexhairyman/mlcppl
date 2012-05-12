@@ -8,6 +8,15 @@
  * Configures all the other files!
  */
 
+// C++ stl imports
 #include <string>
+#include <initializer_list>
+#include <iostream>
+#include <vector>
+
+// Posix C library imports
+#include <dirent.h>
+#include <unistd.h>
+
 
 using namespace std;

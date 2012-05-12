@@ -38,6 +38,7 @@ else()
   add_definitions("-std=c++0x")
 endif()
 
+include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include ${CMAKE_CURRENT_SOURCE_DIR})
 #code variables
 set(C_NS "mlcppl")
 message("namespace for functions: ${C_NS}")
@@ -117,7 +118,6 @@ if(_TEST_)
     add_dependencies(${_T_FILE}-so ulib_so)
     target_link_libraries(${_T_FILE} ulib)
     target_link_libraries(${_T_FILE}-so ulib_so)
-    include_directories(${CMAKE_CURRENT_SOURCE_DIR}/include)
   endforeach()
 endif()
 
