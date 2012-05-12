@@ -5,14 +5,14 @@
 
 using namespace std;
 
-namespace @C_NS@
+namespace mlcppl
 {
 	void _rm(string s)
 	{
 		puts(s.c_str());
 	}
 	// Functions
-	char rm(initializer_list<string> fls)
+	void rm(initializer_list<string> fls)
 	{
 		initializer_list<string>::iterator it;
 		for(it = fls.begin();it != fls.end(); ++it)
@@ -20,7 +20,6 @@ namespace @C_NS@
 			string s(*it);
 			_rm(s);
 		}
-		return 's';
 	}
 }
 
