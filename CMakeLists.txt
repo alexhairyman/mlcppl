@@ -6,6 +6,7 @@ add_custom_target(clean_cache
   COMMAND rm CMakeCache.txt
   )
 
+set(_VER "0.0.6a")
 set(INCS_TOCHECK "unistd.h" "initializer_list" "dirent.h" "string" "iostream" "stdarg.h")
 set(EXECUTABLE_OUTPUT_PATH "${CMAKE_CURRENT_BINARY_DIR}/bin")
 set(LIBRARY_OUTPUT_PATH "${CMAKE_CURRENT_BINARY_DIR}/lib")
@@ -45,7 +46,7 @@ message("namespace for functions: ${C_NS}")
 
 list(APPEND
   M_AVAIL
-  "util" "output" "_dirent"
+  "util" "_dirent"
   )
 list(APPEND
   M_BUILT
@@ -53,9 +54,12 @@ list(APPEND
   )
 list(APPEND
   T_AVAIL
-  "_direnttest"
+  "_direnttest" "utiltest1"
   )
-  
+
+macro(add_int_include deffile)
+  file(APPEND "${CMAKE_CURRENT_BINARY_DIR}/mlppl.hh" "#include <${deffile}>")
+endmacro()
 
 #info variables
 set(I_PROJ "${PROJECT_NAME}")
@@ -70,43 +74,51 @@ endif()
 
 configure_file("README.in" "../README.md")
 
-#file(WRITE "${CMAKE_CURRENT_BINARY_DIR}/built_mods.txt" "Modules that will be built: \n")
 foreach(_C_FILE IN LISTS M_AVAIL)
   list(FIND M_BUILT ${_C_FILE} IS_FOUND)
   if(${IS_FOUND} EQUAL -1)
-	message("NOT compiling module ${_C_FILE} with header: ${_C_FILE}.hh with respective implementation: ${_C_FILE}.cc")
+	  message("NOT compiling module ${_C_FILE} with header: ${_C_FILE}.hh with respective implementation: ${_C_FILE}.cc")
   else()
-	message("compiling module ${_C_FILE} with header: ${_C_FILE}.hh with respective implementation: ${_C_FILE}.cc")
-	message("configuring module header: include/${_C_FILE}.hh")
-	configure_file(
-	  "include/${_C_FILE}.hh"
-	  "${_C_FILE}.hh"
-	  )
-	configure_file(
-	  "src/${_C_FILE}.cc"
-	  "${_C_FILE}.cc"
-	  )
-	list(APPEND
-	  M_COMP
-	  "${_C_FILE}.cc"
-	  )
-	if(M_TEST)
-	  message("Compiling ${_C_FILE} small test")
-	  add_definitions("-D_M_TEST")
-	  add_executable("${_C_FILE}" "${_C_FILE}.cc")
-	endif()
+	  message("compiling module ${_C_FILE} with header: ${_C_FILE}.hh with respective implementation: ${_C_FILE}.cc")
+	  message("configuring module header: include/${_C_FILE}.hh")
+    message("enabling header for: ${_C_FILE} in mlcppl.hh")
+    add_definitions("-DM_${_C_FILE}")
+	  configure_file(
+	    "include/${_C_FILE}.hh"
+	    "${_C_FILE}.hh"
+	    )
+	  configure_file(
+	    "src/${_C_FILE}.cc"
+	    "${_C_FILE}.cc"
+	    )
+	  list(APPEND
+	    M_COMP
+	    "${_C_FILE}.cc"
+	    )
+	  if(M_TEST)
+	    message("Compiling ${_C_FILE} small test")
+	    add_definitions("-D_M_TEST")
+	    add_executable("${_C_FILE}-ex" "${_C_FILE}.cc")
+	  endif()
+    
+    if(INBUILD)
+      add_library("${_C_FILE}-stat" STATIC "${_C_FILE}.cc")
+      add_library("${_C_FILE}-so" SHARED "${_C_FILE}.cc")
+      set_target_properties("${_C_FILE}-stat" "${_C_FILE}-so"
+        PROPERTIES VERSION "${_VER}"
+        )
+    endif()
   endif()
 endforeach(_C_FILE)
 
 message("Compile static ulib library")
 add_library("ulib" STATIC ${M_COMP})
 message("Compiling shared library")
-add_library("ulib_so" SHARED ${M_COMP})
+add_library("ulib-so" SHARED ${M_COMP})
 
-set_target_properties(ulib_so ulib
-  PROPERTIES VERSION "0.0.3a"
+set_target_properties(ulib-so ulib
+  PROPERTIES VERSION "${_VER}"
   )
-
 
 if(_TEST_)
   foreach(_T_FILE IN LISTS T_AVAIL)
@@ -115,9 +127,9 @@ if(_TEST_)
     add_executable(${_T_FILE} test/${_T_FILE}.cc)
     add_executable(${_T_FILE}-so test/${_T_FILE}.cc)
     add_dependencies(${_T_FILE} ulib)
-    add_dependencies(${_T_FILE}-so ulib_so)
+    add_dependencies(${_T_FILE}-so ulib-so)
     target_link_libraries(${_T_FILE} ulib)
-    target_link_libraries(${_T_FILE}-so ulib_so)
+    target_link_libraries(${_T_FILE}-so ulib-so)
   endforeach()
 endif()
 
@@ -133,7 +145,7 @@ set(CPACK_DEBIAN_PACKAGE_MAINTAINER "alxehairyman@gmail.com")
 set(CPACK_GENERATOR "DEB;RPM;TGZ;TBZ2;STGZ;ZIP")
 set(CPACK_SOURCE_GENERATOR "ZIP;TBZ2;TGZ")
 
-install(TARGETS ulib
+install(TARGETS ulib ulib-so
   DESTINATION lib
   )
 
