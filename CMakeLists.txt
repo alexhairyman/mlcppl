@@ -2,11 +2,15 @@ message("Building now")
 cmake_minimum_required(VERSION 2.8)
 project("mlcppl")
 
+if(uclang)
+  set(CMAKE_CXX_COMPILER "clang++")
+endif()
+
 add_custom_target(clean_cache
   COMMAND rm CMakeCache.txt
   )
 
-set(_VER "0.0.6a")
+set(_VER "0.0.8a")
 set(INCS_TOCHECK "unistd.h" "initializer_list" "dirent.h" "string" "iostream" "stdarg.h")
 set(EXECUTABLE_OUTPUT_PATH "${CMAKE_CURRENT_BINARY_DIR}/bin")
 set(LIBRARY_OUTPUT_PATH "${CMAKE_CURRENT_BINARY_DIR}/lib")

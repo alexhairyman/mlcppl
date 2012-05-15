@@ -9,15 +9,13 @@ namespace mlcppl
     cout << p << '\n';
   }
 
-  template<typename T> vector<T> makevec (initializer_list<T> initlist)
+  template<typename Tp> vector<Tp> makevec (initializer_list<Tp> initlist)
   {
-    vector<T> vt;
-    initializer_list<T>::iterator it;
-
-    for(it=initlist.begin(); it != initlist.end(); ++it)
+    vector<Tp> vt;
+    
+    for(Tp x : initlist)
       {
-        T s = *it;
-        vt.insert(vt.end(), s);
+        vt.insert(vt.end(), x); 
       }
     return vt;
   }
