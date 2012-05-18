@@ -10,7 +10,11 @@ add_custom_target(clean_cache
   COMMAND rm CMakeCache.txt
   )
 
-set(_VER "0.0.8a")
+set(MAJ_VER 0)
+set(MIN_VER 0)
+set(SMALL_VER 9)
+set(POST_VER "a")
+set(_VER "${MAJ_VER}.${MIN_VER}.${SMALL_VER}${POST_VER}")
 set(INCS_TOCHECK "unistd.h" "initializer_list" "dirent.h" "string" "iostream" "stdarg.h")
 set(EXECUTABLE_OUTPUT_PATH "${CMAKE_CURRENT_BINARY_DIR}/bin")
 set(LIBRARY_OUTPUT_PATH "${CMAKE_CURRENT_BINARY_DIR}/lib")
