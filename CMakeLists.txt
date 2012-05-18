@@ -54,15 +54,15 @@ message("namespace for functions: ${C_NS}")
 
 list(APPEND
   M_AVAIL
-  "util" "_dirent" "misc"
+  "util" "_dirent"
   )
 list(APPEND
   M_BUILT
-  "util" "_dirent" "misc"
+  "util" "_dirent"
   )
 list(APPEND
   T_AVAIL
-  "_direnttest" "utiltest1" "misctest"
+  "_direnttest" "misctest"
   )
 
 macro(add_int_include deffile)
