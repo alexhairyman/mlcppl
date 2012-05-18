@@ -12,8 +12,8 @@ add_custom_target(clean_cache
 
 set(MAJ_VER 0)
 set(MIN_VER 0)
-set(SMALL_VER 9)
-set(POST_VER "a")
+set(SMALL_VER 10)
+set(POST_VER "b")
 set(_VER "${MAJ_VER}.${MIN_VER}.${SMALL_VER}${POST_VER}")
 set(INCS_TOCHECK "unistd.h" "initializer_list" "dirent.h" "string" "iostream" "stdarg.h")
 set(EXECUTABLE_OUTPUT_PATH "${CMAKE_CURRENT_BINARY_DIR}/bin")
